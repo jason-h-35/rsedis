@@ -1,7 +1,7 @@
 use std::{
     collections::{Bound, HashMap, HashSet},
+    convert::TryInto,
     io::Write,
-    mem::replace,
     sync::mpsc::channel,
     sync::mpsc::Sender,
     thread,
@@ -1038,7 +1038,7 @@ fn lrem(parser: &mut ParsedCommand, db: &mut Database, dbindex: usize) -> Respon
     let count = try_validate!(parser.get_i64(2), "Invalid count");
     let value = try_validate!(parser.get_vec(3), "Invalid value");
     let r = match db.get_mut(dbindex, &key) {
-        Some(el) => match el.lrem(count < 0, count.abs() as usize, value) {
+        Some(el) => match el.lrem(count < 0, count.unsigned_abs().try_into().unwrap(), value) {
             Ok(removed) => Response::Integer(removed as i64),
             Err(err) => Response::Error(err.to_string()),
         },
@@ -1290,7 +1290,7 @@ fn smove(parser: &mut ParsedCommand, db: &mut Database, dbindex: usize) -> Respo
         let destination = db.get_or_create(dbindex, &destination_key);
         match destination.sadd(member, set_max_intset_entries) {
             Ok(_) => (),
-            Err(err) => panic!("Unexpected failure {}", err.to_string()),
+            Err(err) => panic!("Unexpected failure {}", err),
         }
     }
 
@@ -2366,7 +2366,7 @@ fn generic_unwatch(
     watched_keys: &mut HashSet<(usize, Vec<u8>)>,
 ) -> bool {
     let mut watched_verified = true;
-    for (index, key) in watched_keys.drain().into_iter() {
+    for (index, key) in watched_keys.drain() {
         if !db.key_watch_verify(index, &key, client_id) {
             watched_verified = false;
             break;
@@ -2401,7 +2401,7 @@ fn exec(db: &mut Database, client: &mut Client) -> Response {
         return Response::Error("ERR EXEC without MULTI".to_owned());
     }
     client.multi = false;
-    let c = replace(&mut client.multi_commands, vec![]);
+    let c = std::mem::take(&mut client.multi_commands);
     if !generic_unwatch(db, client.id, &mut client.watched_keys) {
         return Response::Nil;
     }
