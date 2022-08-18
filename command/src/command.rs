@@ -983,10 +983,9 @@ fn linsert(parser: &mut ParsedCommand, db: &mut Database, dbindex: usize) -> Res
     let before_str = try_validate!(parser.get_str(2), "Syntax error");
     let pivot = try_validate!(parser.get_vec(3), "Invalid pivot");
     let value = try_validate!(parser.get_vec(4), "Invalid value");
-    let before;
-    match &*before_str.to_ascii_lowercase() {
-        "after" => before = false,
-        "before" => before = true,
+    let before = match &*before_str.to_ascii_lowercase() {
+        "after" => false,
+        "before" => true,
         _ => return Response::Error("ERR syntax error".to_owned()),
     };
     let r = match db.get_mut(dbindex, &key) {
