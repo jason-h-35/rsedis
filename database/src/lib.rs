@@ -2217,10 +2217,7 @@ impl Database {
     /// ```
     pub fn mapped_command(&self, command: &str) -> Option<String> {
         match self.config.rename_commands.get(command) {
-            Some(c) => match c {
-                Some(s) => Some(s.clone()),
-                None => None,
-            },
+            Some(c) => c.as_ref().cloned(),
             None => Some(command.to_owned()),
         }
     }
