@@ -68,6 +68,6 @@ pub fn vec_to_usize(data: &[u8]) -> Result<usize, OperationError> {
         ));
     }
 
-    let res = from_utf8(&data)?;
+    let res = from_utf8(data)?;
     Ok(res.parse::<usize>()?)
 }
