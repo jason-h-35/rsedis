@@ -162,10 +162,7 @@ impl Value {
     /// assert!(!Value::String(ValueString::Integer(1)).is_nil());
     /// ```
     pub fn is_nil(&self) -> bool {
-        match self {
-            Value::Nil => true,
-            _ => false,
-        }
+        matches!(self, Value::Nil)
     }
 
     /// Returns true if the value is a string.
@@ -179,10 +176,7 @@ impl Value {
     /// assert!(Value::String(ValueString::Integer(1)).is_string());
     /// ```
     pub fn is_string(&self) -> bool {
-        match self {
-            Value::String(_) => true,
-            _ => false,
-        }
+        matches!(self, Value::String(_))
     }
 
     /// Returns true if the value is a list.
@@ -196,10 +190,7 @@ impl Value {
     /// assert!(Value::List(ValueList::new()).is_list());
     /// ```
     pub fn is_list(&self) -> bool {
-        match self {
-            Value::List(_) => true,
-            _ => false,
-        }
+        matches!(self, Value::List(_))
     }
 
     /// Returns true if the value is a set.
@@ -213,10 +204,7 @@ impl Value {
     /// assert!(Value::Set(ValueSet::new()).is_set());
     /// ```
     pub fn is_set(&self) -> bool {
-        match self {
-            Value::Set(_) => true,
-            _ => false,
-        }
+        matches!(self, Value::Set(_))
     }
 
     /// Sets the value to a string.
