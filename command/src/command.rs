@@ -480,7 +480,7 @@ fn setbit(parser: &mut ParsedCommand, db: &mut Database, dbindex: usize) -> Resp
         "ERR bit offset is not an integer or out of range"
     );
     validate!(
-        index >= 0 && index < 4 * 1024 * 1024 * 1024,
+        (0..4 * 1024 * 1024 * 1024).contains(&index),
         "ERR bit offset is not an integer or out of range"
     );
     let value = try_validate!(
