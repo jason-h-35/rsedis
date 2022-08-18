@@ -46,10 +46,7 @@ impl ValueSet {
     }
 
     pub fn is_intset(&self) -> bool {
-        match *self {
-            ValueSet::Integer(_) => true,
-            _ => false,
-        }
+        matches!(*self, ValueSet::Integer(_))
     }
 
     fn make_data(&mut self) {
