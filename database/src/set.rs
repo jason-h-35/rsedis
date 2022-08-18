@@ -31,7 +31,7 @@ impl ValueSet {
     pub fn create_with_hashset(h: HashSet<Vec<u8>>) -> ValueSet {
         let mut s = HashSet::new();
         for v in h.iter() {
-            match vec_to_usize(&v) {
+            match vec_to_usize(v) {
                 Ok(n) => {
                     s.insert(n);
                 }
@@ -86,7 +86,7 @@ impl ValueSet {
         match self {
             ValueSet::Data(set) => set.remove(el),
             ValueSet::Integer(set) => {
-                match vec_to_usize(&el) {
+                match vec_to_usize(el) {
                     Ok(v) => set.remove(&v),
                     Err(_) => false, // only have usize, removing not a usize
                 }
@@ -98,7 +98,7 @@ impl ValueSet {
         match self {
             ValueSet::Data(set) => set.contains(el),
             ValueSet::Integer(set) => {
-                match vec_to_usize(&el) {
+                match vec_to_usize(el) {
                     Ok(v) => set.contains(&v),
                     Err(_) => false, // only have usize, removing not a usize
                 }
@@ -238,7 +238,7 @@ impl ValueSet {
                     match newvalue {
                         ValueSet::Integer(set) => {
                             for el in set.iter() {
-                                elements.remove(&el);
+                                elements.remove(el);
                             }
                         }
                         ValueSet::Data(set) => {

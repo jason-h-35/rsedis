@@ -632,7 +632,7 @@ impl ValueSortedSet {
                         let _ = self.zadd(weight * v, k.clone(), false, false, false, true, true);
                     }
                     Aggregate::Max => {
-                        let s = match self.zscore(&k) {
+                        let s = match self.zscore(k) {
                             Some(s) => s,
                             None => NEG_INFINITY,
                         };
@@ -642,7 +642,7 @@ impl ValueSortedSet {
                         }
                     }
                     Aggregate::Min => {
-                        let s = match self.zscore(&k) {
+                        let s = match self.zscore(k) {
                             Some(s) => s,
                             None => INFINITY,
                         };
