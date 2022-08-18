@@ -213,8 +213,8 @@ impl ValueList {
         match *self {
             ValueList::Data(ref list) => {
                 encode_len(list.len(), &mut v).unwrap();
-                for ref item in list {
-                    encode_slice_u8(&*item, &mut v, true)?;
+                for item in list {
+                    encode_slice_u8(item, &mut v, true)?;
                 }
             }
         };
